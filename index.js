@@ -1,8 +1,9 @@
+import "dotenv/config";
 import express from "express";
 
 const app = express();
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.use(express.json());
 
 let teaData = [];
@@ -22,53 +23,38 @@ app.get("/orderReceive", (req, res) => {
 });
 
 //get a tea with id
-app.get('/orderReceive/:id', (req, res) => {
-    const tea = teaData.find(t => t.id === parseInt(req.params.id))
+app.get("/orderReceive/:id", (req, res) => {
+  const tea = teaData.find((t) => t.id === parseInt(req.params.id));
 
-    if (!tea) {
-        return res.status(404).send('Tea not found')
-    }
-    res.status(200).send(tea)
-})
+  if (!tea) {
+    return res.status(404).send("Tea not found");
+  }
+  res.status(200).send(tea);
+});
 
 //update tea
-app.put('/orderReceive/:id', (req, res) => {
-     const tea = teaData.find((t) => t.id === parseInt(req.params.id));
+app.put("/orderReceive/:id", (req, res) => {
+  const tea = teaData.find((t) => t.id === parseInt(req.params.id));
 
-     if (!tea) {
-       return res.status(404).send("Tea not found");
-    }
-    const { name, price } = req.body
-    tea.name = name
-    tea.price = price
-    res.status(200).send(tea)
-})
-
+  if (!tea) {
+    return res.status(404).send("Tea not found");
+  }
+  const { name, price } = req.body;
+  tea.name = name;
+  tea.price = price;
+  res.status(200).send(tea);
+});
 
 //delete tea
-app.delete('/orderReceive/:id', (req, res) => {
-    const index = teaData.findIndex(t => t.id === parseInt(req.params.id))
-  
-    if (index === -1) {
-        return res.status(404).send('tea not found')
-    }
-    teaData.splice(index , 1)
-    return res.status(200).send( `Deleted at: ${index}`)
-})
+app.delete("/orderReceive/:id", (req, res) => {
+  const index = teaData.findIndex((t) => t.id === parseInt(req.params.id));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+  if (index === -1) {
+    return res.status(404).send("tea not found");
+  }
+  teaData.splice(index, 1);
+  return res.status(200).send(`Deleted at: ${index}`);
+});
 
 app.get("/", (req, res) => {
   res.send("hello , giving respond!");
